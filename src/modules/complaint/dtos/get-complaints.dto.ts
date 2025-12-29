@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsOptional, IsString } from 'class-validator';
-import { ComplaintStatus } from 'prisma/generated/enums';
 import { PaginationDto } from 'src/common/dtos';
+import { ComplaintStatus } from 'src/generated/prisma/enums';
 
 export class GetComplaintsDto extends PaginationDto {
   @IsOptional()

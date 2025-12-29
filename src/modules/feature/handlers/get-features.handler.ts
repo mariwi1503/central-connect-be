@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FeatureType } from 'prisma/generated/enums';
+import { FeatureType } from 'src/generated/prisma/enums';
 import { PrismaService } from 'src/integrations/prisma-client/prisma.service';
 
 @Injectable()

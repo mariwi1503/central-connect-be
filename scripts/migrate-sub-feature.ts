@@ -1,8 +1,8 @@
 import { Client } from 'pg';
 import * as dotenv from 'dotenv';
-import { PrismaClient } from 'prisma/generated/client';
 import { adapter } from 'prisma/adapter';
 import { generateKeyFromLabel } from 'src/utils';
+import { PrismaClient } from 'src/generated/prisma/client';
 
 dotenv.config();
 

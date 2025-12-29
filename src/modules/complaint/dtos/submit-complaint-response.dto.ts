@@ -8,7 +8,7 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
-import { ComplaintStatus } from 'prisma/generated/enums';
+import { ComplaintStatus } from 'src/generated/prisma/enums';
 
 export class SubmitComplaintResponseDto {
   @IsNotEmpty()

@@ -1,7 +1,7 @@
 import { Client } from 'pg';
 import { adapter } from 'prisma/adapter';
-import { PrismaClient, UserStatus } from 'prisma/generated/client';
 import * as dotenv from 'dotenv';
+import { PrismaClient, UserStatus } from 'src/generated/prisma/client';
 
 dotenv.config();
 

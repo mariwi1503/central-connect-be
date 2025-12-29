@@ -5,10 +5,10 @@ import {
   GetFeaturesHandler,
   GetSubFeaturesHandler,
 } from './handlers';
-import { FeatureType } from 'prisma/generated/enums';
 import { CreateFeatureDto, CreateSubFeatureDto } from './dtos';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '../auth/guards/jwt.guard';
+import { FeatureType } from 'src/generated/prisma/enums';
 
 @UseGuards(JwtGuard)
 @ApiTags('Features and Sub Features')

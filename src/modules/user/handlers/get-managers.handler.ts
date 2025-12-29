@@ -1,15 +1,14 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from 'src/integrations/prisma-client/prisma.service';
 import { createPaginator } from 'prisma-pagination';
-import { Prisma } from 'prisma/generated/client';
 import { GetManagersDto } from '../dtos';
+import { Prisma } from 'src/generated/prisma/client';
 
 @Injectable()
 export class GetManagersHandler {
   constructor(private prisma: PrismaService) {}
 
   async main(query: GetManagersDto) {
-    console.log('🚀 ~ :12 ~ query:', query);
     const { page = 1, perPage = 25, search, isActive, roleIds = [] } = query;
 
     const paginate = createPaginator({ perPage });

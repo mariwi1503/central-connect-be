@@ -1,7 +1,7 @@
 import { Client } from 'pg';
 import * as dotenv from 'dotenv';
-import { ComplaintStatus, PrismaClient } from 'prisma/generated/client';
 import { adapter } from 'prisma/adapter';
+import { ComplaintStatus, PrismaClient } from 'src/generated/prisma/client';
 
 dotenv.config();
 

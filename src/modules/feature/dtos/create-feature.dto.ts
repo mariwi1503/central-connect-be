@@ -10,7 +10,7 @@ import {
   IsEnum,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
-import { PlatformType } from 'prisma/generated/enums';
+import { PlatformType } from 'src/generated/prisma/enums';
 
 class SubFeatureDto {
   @IsNotEmpty()
