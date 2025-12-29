@@ -1,0 +1,222 @@
+<html lang='id'>
+  <head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Selamat Datang di Central Connect</title>
+    <style>
+      /* Standar reset untuk email client */
+      body,
+      table,
+      td,
+      a {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      table,
+      td {
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      }
+      img {
+        -ms-interpolation-mode: bicubic;
+        border: 0;
+        height: auto;
+        line-height: 100%;
+        outline: none;
+        text-decoration: none;
+      }
+      table {
+        border-collapse: collapse !important;
+      }
+      body {
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        background-color: #f6f9fc;
+      }
+
+      /* Media Query untuk Mobile */
+      @media screen and (max-width: 600px) {
+        .container-table {
+          width: 100% !important;
+        }
+        .content-padding {
+          padding: 20px !important;
+        }
+        .button-full {
+          width: 100% !important;
+          display: block !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+      <tr>
+        <td align='center' bgcolor='#f6f9fc' style='padding: 20px 0'>
+          <table
+            border='0'
+            cellpadding='0'
+            cellspacing='0'
+            width='600'
+            class='container-table'
+            style='
+              background-color: #ffffff;
+              border-radius: 8px;
+              overflow: hidden;
+            '
+          >
+            <tr>
+              <td
+                align='center'
+                style='padding: 40px 0 20px 0; background-color: #ffffff'
+              >
+                <img
+                  src='https://central-batam-prod.s3.ap-southeast-1.amazonaws.com/ckHpvCpl4DpUISo53d2XEWp0ry6WOeZbfxqPT7zYTFrwE46Cwc4jKOANvxdM.png'
+                  alt='Central Connect Logo'
+                  width='180'
+                  style='display: block; width: 180px; max-width: 180px'
+                />
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align='left'
+                class='content-padding'
+                style="
+                  padding: 40px;
+                  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                  color: #333333;
+                "
+              >
+                <h2
+                  style='
+                    margin: 0 0 20px 0;
+                    font-size: 24px;
+                    color: #2d3436;
+                    text-align: center;
+                  '
+                >
+                  Selamat Bergabung,
+                  {{name}}!
+                </h2>
+                <p
+                  style='margin: 0 0 15px 0; line-height: 1.6; font-size: 16px'
+                >
+                  Akun Anda telah berhasil dibuat di
+                  <strong>Central Connect</strong>. Sekarang Anda dapat
+                  mengakses semua layanan kami dengan informasi login di bawah
+                  ini:
+                </p>
+
+                <table
+                  width='100%'
+                  style='
+                    background-color: #f8f9fa;
+                    border-radius: 8px;
+                    margin: 25px 0;
+                  '
+                >
+                  <tr>
+                    <td
+                      style='
+                        padding: 20px;
+                        font-size: 15px;
+                        color: #2d3436;
+                        font-family: Arial, sans-serif;
+                      '
+                    >
+                      <strong>Email:</strong>
+                      {{email}}<br />
+                      <strong>Password:</strong>
+                      {{password}}
+                    </td>
+                  </tr>
+                </table>
+
+                <p
+                  style='margin: 0 0 25px 0; line-height: 1.6; font-size: 16px'
+                >
+                  Silakan klik tombol di bawah ini untuk masuk ke akun Anda:
+                </p>
+
+                <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                  <tr>
+                    <td align='center'>
+                      <div
+                        style='
+                          background-color: #95a5a6;
+                          color: #ffffff;
+                          padding: 15px 30px;
+                          text-decoration: none;
+                          font-weight: bold;
+                          border-radius: 5px;
+                          display: inline-block;
+                          font-family: Arial, sans-serif;
+                          cursor: not-allowed;
+                        '
+                      >
+                        Login (Belum Tersedia)
+                      </div>
+                      <p
+                        style='
+                          margin: 10px 0 0 0;
+                          font-size: 12px;
+                          color: #e74c3c;
+                          font-style: italic;
+                          font-family: Arial, sans-serif;
+                        '
+                      >
+                        *Domain sedang dikonfigurasi, silakan coba beberapa saat
+                        lagi.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align='center'
+                class='content-padding'
+                style="
+                  padding: 0 40px 40px 40px;
+                  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+                  color: #636e72;
+                "
+              >
+                <p style='margin: 0; font-size: 14px; line-height: 1.6'>
+                  Kami senang Anda ada di sini. Jika Anda memiliki pertanyaan
+                  atau butuh bantuan, tim dukungan kami selalu siap membantu.
+                </p>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align='center'
+                style='
+                  padding: 30px;
+                  background-color: #2d3436;
+                  color: #ffffff;
+                  font-family: Arial, sans-serif;
+                '
+              >
+                <p style='margin: 0; font-size: 14px; font-weight: bold'>
+                  Connecting Community
+                </p>
+                <p style='margin: 10px 0 0 0; font-size: 12px; color: #b2bec3'>
+                  © 2025 Central Connect. Semua hak cipta dilindungi.<br />
+                  Ini adalah email otomatis, mohon tidak membalas.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

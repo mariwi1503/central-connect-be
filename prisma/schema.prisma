@@ -1,0 +1,391 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider     = "prisma-client"
+  output       = "./generated"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  name                     String
+  email                    String     @unique
+  isEmailVerified          Boolean    @default(false) @map("is_email_verified")
+  phone                    String?
+  imageUrl                 String?    @map("image_url")
+  password                 String
+  isActive                 Boolean    @default(true) @map("is_active")
+  isReceiveEmergency       Boolean    @default(false) @map("is_receive_emergency")
+  isDashboardAccessGranted Boolean    @default(false) @map("is_dashboard_access_granted")
+  isResident               Boolean    @map("is_resident")
+  rating                   Float?
+  status                   UserStatus @default(REQUESTED)
+  lastActive               DateTime?  @map("last_active") @db.Timestamp()
+  resetPasswordOtp         String?    @map("reset_password_otp")
+  resetPasswordOtpExp      DateTime?  @map("reset_password_otp_exp") @db.Timestamp()
+
+  role                    Role?                   @relation(fields: [roleId], references: [id])
+  roleId                  String?                 @map("role_id") @db.Uuid
+  unitOwned               Unit[]
+  userUnits               UserUnit[]
+  complaints              Complaint[]
+  complaintResponses      ComplaintResponse[]
+  userComplaintCategories UserComplaintCategory[]
+  userManagedProjects     UserManagedProject[]
+
+  @@map("user")
+}
+
+model LoginLog {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  platForm  PlatformType
+  isSuccess Boolean      @map("is_success")
+
+  @@map("login_log")
+}
+
+enum PlatformType {
+  WEB
+  MOBILE
+}
+
+enum UserStatus {
+  REQUESTED
+  APPROVED
+  REJECTED
+}
+
+model Role {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  label  String
+  key    String   @unique
+  access String[]
+
+  users           User[]
+  rolePermissions RolePermission[]
+  roleFeatures    RoleFeature[]
+  roleSubFeatures RoleSubFeature[]
+
+  @@map("role")
+}
+
+model RolePermission {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  role        Role         @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId      String       @map("role_id") @db.Uuid
+  permissions Permission[]
+
+  @@map("role_permission")
+}
+
+model Permission {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  label            String
+  key              String          @unique
+  rolePermission   RolePermission? @relation(fields: [rolePermissionId], references: [id])
+  rolePermissionId String?         @map("role_permission_id") @db.Uuid
+
+  @@map("permission")
+}
+
+model Feature {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  label    String
+  key      String      @unique
+  order    Int
+  imageUrl String?     @map("image_url")
+  type     FeatureType
+
+  subFeatures  SubFeature[]
+  roleFeatures RoleFeature[]
+
+  @@map("feature")
+}
+
+model RoleFeature {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  role      Role    @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId    String  @map("role_id") @db.Uuid
+  feature   Feature @relation(fields: [featureId], references: [id], onDelete: Cascade)
+  featureId String  @map("feature_id") @db.Uuid
+
+  @@unique([roleId, featureId])
+  @@map("role_feature")
+}
+
+enum FeatureType {
+  MOBILE
+  WEB
+}
+
+model SubFeature {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  label           String
+  key             String           @unique
+  order           Int
+  imageUrl        String?          @map("image_url")
+  feature         Feature          @relation(fields: [featureId], references: [id])
+  featureId       String           @map("feature_id") @db.Uuid
+  roleSubFeatures RoleSubFeature[]
+
+  @@map("sub_feature")
+}
+
+model RoleSubFeature {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  roleId       String     @map("role_id") @db.Uuid
+  subFeature   SubFeature @relation(fields: [subFeatureId], references: [id], onDelete: Cascade)
+  subFeatureId String     @map("sub_feature_id") @db.Uuid
+
+  @@unique([roleId, subFeatureId])
+  @@map("role_sub_feature")
+}
+
+model Project {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  cisId Int    @unique @map("cis_id")
+  name  String
+  code  String
+
+  clusters            Cluster[]
+  userManagedProjects UserManagedProject[]
+
+  @@map("project")
+}
+
+model UserManagedProject {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId String  @map("project_id") @db.Uuid
+  user      User?   @relation(fields: [userId], references: [id])
+  userId    String? @map("user_id") @db.Uuid
+
+  @@unique([userId, projectId])
+  @@map("user_managed_project")
+}
+
+model Cluster {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  cisId        Int     @unique @map("cis_id")
+  cisProjectId Int     @map("cis_project_id")
+  name         String
+  project      Project @relation(fields: [projectId], references: [id])
+  projectId    String  @map("project_id") @db.Uuid
+  units        Unit[]
+
+  @@map("cluster")
+}
+
+model Unit {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  cisId             Int       @unique @map("cis_id")
+  cisClusterId      Int       @map("cis_cluster_id")
+  name              String
+  state             String?
+  buildingType      String    @map("building_type")
+  unitType          String    @map("unit_type")
+  lt                String?
+  lb                String?
+  internalBastbDate DateTime? @map("internal_bastb_date") @db.Date
+
+  owner      User?       @relation(fields: [userId], references: [id])
+  userId     String?     @unique @map("user_id") @db.Uuid
+  userUnits  UserUnit[]
+  cluster    Cluster     @relation(fields: [clusterId], references: [id])
+  clusterId  String      @map("cluster_id") @db.Uuid
+  complaints Complaint[]
+
+  @@map("unit")
+}
+
+model UserUnit {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  isApproved Boolean @default(false) @map("is_approved")
+  unit       Unit    @relation(fields: [unitId], references: [id])
+  unitId     String  @map("unit_id") @db.Uuid
+  user       User    @relation(fields: [userId], references: [id])
+  userId     String  @map("user_id") @db.Uuid
+
+  @@unique([userId, unitId])
+  @@map("user_unit")
+}
+
+model ComplaintCategory {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  label       String @unique
+  description String
+  order       Int
+
+  compaints               Complaint[]
+  userComplaintCategories UserComplaintCategory[]
+
+  @@map("complaint_category")
+}
+
+model UserComplaintCategory {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  // user User
+  // complaintCategory ComplaintCategory
+  user                User              @relation(fields: [userId], references: [id])
+  userId              String            @map("user_id") @db.Uuid
+  complaintCategory   ComplaintCategory @relation(fields: [complaintCategoryId], references: [id])
+  complaintCategoryId String            @map("complaint_category_id") @db.Uuid
+
+  @@unique([userId, complaintCategoryId])
+  @@map("user_complaint_category")
+}
+
+model Complaint {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  title                     String
+  content                   String
+  duration                  Int?
+  rating                    Int?
+  review                    String?
+  managementRating          Int?            @default(0) @map("management_rating")
+  managementReview          String?         @map("management_review")
+  managementRatingTimeStamp DateTime?       @map("management_rating_time_stamp") @db.Timestamp()
+  workDuration              BigInt?         @map("work_duration")
+  estimatedFinishAt         DateTime?       @map("estimated_finish_at") @db.Timestamp()
+  status                    ComplaintStatus @default(SUBMITTED)
+
+  complaintCategory   ComplaintCategory   @relation(fields: [complaintCategoryId], references: [id])
+  complaintCategoryId String              @map("complaint_category_id") @db.Uuid
+  user                User                @relation(fields: [userId], references: [id])
+  userId              String              @map("user_id") @db.Uuid
+  unit                Unit?               @relation(fields: [unitId], references: [id])
+  unitId              String?             @map("unit_id") @db.Uuid
+  complaintImages     ComplaintImage[]
+  complaintResponses  ComplaintResponse[]
+
+  @@map("complaint")
+}
+
+enum ComplaintStatus {
+  SUBMITTED // TERKIRIM
+  IN_PROGRESS // PROSES
+  RESOLVED // SELESAI
+  CANCELLED // BATAL
+  INVALID // INVALID
+  FURTHER_PROCESS // PROSES LANJUTAN
+  PENDING_APPROVAL // MENUNGGU_KONFIRMASI
+}
+
+model ComplaintImage {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  url             String
+  complaintStatus ComplaintStatus @map("complaint_status")
+
+  complaint   Complaint? @relation(fields: [complaintId], references: [id])
+  complaintId String?    @map("complaint_id") @db.Uuid
+
+  @@map("complaint_image")
+}
+
+model ComplaintResponse {
+  id        String    @id @default(uuid()) @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+  deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+  url             String
+  complaintStatus ComplaintStatus @map("complaint_status")
+  rating          Int
+
+  complaint   Complaint @relation(fields: [complaintId], references: [id])
+  complaintId String    @map("complaint_id") @db.Uuid
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @map("user_id") @db.Uuid
+
+  @@map("complaint_response")
+}
+
+// model ModelName {
+//   id        String    @id @default(uuid()) @db.Uuid
+//   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp()
+//   updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp()
+//   deletedAt DateTime? @map("deleted_at") @db.Timestamp()
+
+//   @@map("model_name")
+// }
