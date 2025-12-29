@@ -2,7 +2,7 @@ import { Client } from 'pg';
 import { adapter } from 'prisma/adapter';
 import * as dotenv from 'dotenv';
 import { generateKeyFromLabel } from 'src/utils';
-import { PrismaClient } from 'src/generated/prisma/client';
+import { PrismaClient } from '../src/generated/prisma/client';
 
 dotenv.config();
 

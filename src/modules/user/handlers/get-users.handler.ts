@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/integrations/prisma-client/prisma.service';
 import { GetUsersDto } from '../dtos';
 import { createPaginator } from 'prisma-pagination';
-import { Prisma } from 'src/generated/prisma/client';
+import { Prisma } from '../../../generated/prisma/client';
 
 @Injectable()
 export class GetUsersHandler {
