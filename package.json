@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "npx prisma generate && nest build",
+    "build": "prisma generate && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "postinstall": "npx prisma generate",
+    "postinstall": "prisma generate",
     "migrate:all": "npm run migrate:features && npm run migrate:sub-features && npm run migrate:roles && npm run migrate:users && npm run migrate:complaint-cats && npm run migrate:complaints",
     "migrate:features": "tsx ./scripts/migrate-features.ts",
     "migrate:sub-features": "tsx ./scripts/migrate-sub-feature.ts",
